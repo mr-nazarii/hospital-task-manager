@@ -1,38 +1,33 @@
 import Modal from './Modal.js';
-import Requests from './Requests.js';
+import request from './Requests.js';
 import alertMessage from './Alert.js';
+
+import template from './Template.js';
+
+
 
 
 export default class LoginForm {
-  constructor(){
+  constructor() {
     this.render();
   }
 
-  
   // creates input
-  inputCreate(element, type, text, id) {
-    const inputWrap = document.createElement('div');
-    inputWrap.classList.add('mb-3');
-
-    const label = document.createElement('label');
-    label.classList.add('form-label');
-    label.setAttribute('for', id);
-    label.textContent = text;
-
+  inputCreate(element, type, placeholder, id) {
     const input = document.createElement(element);
-    input.classList.add('form-control');
+    input.classList.add('form-control', 'my-4');
     input.type = type;
+    input.placeholder = placeholder;
     input.id = id;
 
-    inputWrap.append(label, input);
+    // inputWrap.append(label, input);
 
-    return inputWrap;
+    return input;
   }
 
-
-
   render() {
-    const form = document.createElement('form')
+    const form = document.createElement('form');
+    
     // fields
     const email = this.inputCreate(
       'input',
@@ -53,60 +48,53 @@ export default class LoginForm {
 
     form.append(email, password, submit);
 
-   
-
     this.loginModal = new Modal(form);
 
-    
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      this.submitHandler(email, password);
+      this.submitHandler(email.value, password.value);
     });
-
-
   }
 
   submitHandler(email, password) {
-    
-
     // придумать лучший способ вытягивать данные
-    const emailVal = email.childNodes[1].value;
-    const passwordVal = password.childNodes[1].value;
+    request.login({ email: email, password: password })
+      .then((resp) => {
+        if (resp.status !== 200) {
+          resp.text().then((data) => {
+            alertMessage(data, 'alert-danger');
+          });
+          throw { code: resp };
+        }
 
-    const request = new Requests();
-    request.login({ email: emailVal, password: passwordVal })
-
-    .then(resp =>  {
-      if (resp.status !== 200) {
-        resp.text().then(data => {
-          alertMessage(data, 'alert-danger');
-        });
-        throw { code: resp };
-        return
-      }
-      console.log(resp);
-      resp.text()
-        .then(data => {
+        resp.text().then((data) => {
           // сохраняем данные
-          localStorage.setItem('token', data);
-          
+          // console.log(data);
+          localStorage.token = data;
+
           // загрузка страницы залогиненого пользователя
           // fetch за всеми карточками
           // request.posts()
+          request
+            .get()
+            .then((resp) => resp.text())
+            .then((data) => {
+              localStorage.cards = JSON.stringify(data);
+              template.loadHeader(document.getElementById('login'));
+              template.loadBody(data);
 
-          request.get()
-          .then(resp => resp.json())
-          .then(data => console.log(data))
-          .catch(e => console.log(e))
-
+            })
+            .catch((e) => console.log(e));
 
           // скрываем модальное
           this.loginModal.remove();
-      
-        })
-    })
-    .catch( e => console.log(e));
-
-
+        });
+      })
+      .catch((e) => console.log(e)); 
   }
 }
+
+
+
+
+// вынести в отдельный метод загрузку всех элементов

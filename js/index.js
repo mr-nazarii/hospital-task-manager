@@ -1,111 +1,40 @@
 import alertMessage from './Alert.js';
 import LoginForm from './LoginForm.js';
 
-
-
-document.getElementById('login').addEventListener('click', () => {
-  const login = new LoginForm();
-});
+import request from './Requests.js';
+import template from './Template.js';
 
 
 
+class App {
+  constructor(loginBtn, root) {
+    this.loginBtn = loginBtn;
+    this.root = root;
+    this.token = localStorage.token;
+    this.loadPage();
+  }
 
-// console.log(login.render());
+  loadPage() {
+    if(this.token) {
+      // const request = new Requests();
+      request
+        .get()
+        .then((resp) => resp.text())
+        .then((data) => {
+          template.loadHeader(this.loginBtn);
+          template.loadBody(data);
+        })
+        .catch((e) => console.log(e));
+    } else {
+      document.getElementById('login').addEventListener('click', () => {
+        const login = new LoginForm();
+      });
+    }
+  }
+}
 
-// class App {
 
-//   constructor() {
-//     this.token = localStorage.getItem('token');
-//     this.cardsData = localStorage.getItem('data');
-//   }
 
-//   checkData() {
-//     if(this.token || this.cardsData){
-//       this.buildPage();
-//     } else {
+const appBtn =  document.getElementById('login');
 
-//     }
-//   }
-//   buildPage() {
-
-//   }
-
-// }
-
-// class App{
-//   constructor(){
-//     this.token = localStorage.getItem('token');
-//     this.cardsData = localStorage.getItem('cards');
-//     this.loadPage();
-//   }
-
-//   loadPage() {
-//     // header button update
-//     const actionBtn = document.getElementById('login');
-//     actionBtn.id = 'createVisit';
-//     actionBtn.textContent = "Create Visit";
-//   }
-
-//   loadHeader() {
-
-//   }
-
-//   loadBody(authorization) {
-//     // fetch('https://ajax.test-danit.com/api/v2/cards', {
-//     //   method: 'GET',
-//     //   headers: {
-//     //     'Authorization': `Bearer beba4fa4-410b-4768-82b3-2397d3ba8070`
-//     //   },
-//     // })
-//     // .then(resp => resp.json())
-//     // .then(data => console.log(data))
-//     // .catch(e => console.log(e))
-
-//   }
-
-//   // _authorization() {
-
-//   //   const code = localStorage.getItem('myCat');
-
-//   //   console.log(code);
-
-//   //   if(code === null){
-
-//   //     return code;
-
-//   //   } else {
-
-//   //     alert('load data');
-
-//   //     // fetch  получить данные с сервера используя код
-
-//   //     //  ----   if yes (load data)  пустой/полный  и изменить кнопку на добавить данные
-
-//   //     //  ----   if no вывести ошибку и загрузить страницу логина
-
-//   //     return code;
-//   //   }
-//   // }
-
-//   renderCards() {
-//     // -----   if пустые
-
-//     // сообщение "карточек ещё нет"
-
-//     // if есть карточки
-//       // карточки грузятся из local storage
-
-//   }
-
-// }
-
-// const runApp = new App();
-// console.log(runApp.authorization);
-// console.log(runApp.cards);
-
-// console.log(runApp.authorization)
-
-// нужно:
-
-// Добавить класс с ошибкой в верхней части экрана
-// добавить класс с
+const app = new App(appBtn, root);

@@ -57,47 +57,4 @@ export default class Modal {
   
 }
 
-// var myModal = new bootstrap.Modal(document.getElementById('myModal'), {
-//   backdrop: true,
-// })
 
-// document.getElementById('login').addEventListener(() => {
-//   myModal.show();
-//   console.log(myModal);
-// })
-
-// renderModal() {
-
-//   const modalWrap = document.createElement('div');
-//   // modal.classList.add('modal');
-//   // modal.setAttribute('tabindex','-1');
-
-//   // const modalDialog = document.createElement('div');
-//   // modalDialog.classList.add('modal-dialog');
-
-//   // const moda
-//   // modal.classList.add('modal', 'fade');
-
-//   modalWrap.innerHTML = `
-//     <div class="modal fade" tabindex="-1">
-//       <div class="modal-dialog">
-//         <div class="modal-content">
-//           <div class="modal-header">
-//             <h5 class="modal-title">Modal title</h5>
-//             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-//           </div>
-//           <div class="modal-body">
-//             ${this.element.outerHTML}
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   `
-
-//   document.body.append(modalWrap);
-
-//   const modal = new bootstrap.Modal(modalWrap.querySelector('.modal'));
-
-//   modal.show();
-
-// }
