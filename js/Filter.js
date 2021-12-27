@@ -101,7 +101,8 @@ class Filter {
 
         this.createSelectOptions(options, select);
 
-        select[0].selected = true;
+
+        // select[0].selected = true;
         selectWrap.append(label, select);
         searchForm.append(selectWrap);
     }
@@ -112,6 +113,7 @@ class Filter {
             option.value = elValue;
             option.textContent = elValue;
             select.append(option);
+            if (elValue === 'all') option.selected = true;
         });
     }
 
