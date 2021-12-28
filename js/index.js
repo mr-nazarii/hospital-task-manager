@@ -3,9 +3,9 @@ import LoginForm from './LoginForm.js';
 
 import request from './Requests.js';
 import template from './Template.js';
+import {Cards as Cards, getAllCards, renderNoDataExist} from "./Cards.js";
 
-
-
+"use strict";
 class App {
   constructor(loginBtn, root) {
     this.loginBtn = loginBtn;
@@ -22,11 +22,11 @@ class App {
         .then((resp) => resp.text())
         .then((data) => {
           template.loadHeader(this.loginBtn);
-          template.loadBody(data);
           getAllCards();
         })
         .catch((e) => console.log(e));
     } else {
+      renderNoDataExist();
       document.getElementById('login').addEventListener('click', () => {
         const login = new LoginForm();
       });
@@ -35,8 +35,8 @@ class App {
 }
 
 
-"use strict";
-import {Cards as Cards, getAllCards} from "./Cards.js";
+
+
 import Requests from "./Requests.js";
 import {BASE_URL, CARDS_URL, ROOT} from "./Constants.js";
 //

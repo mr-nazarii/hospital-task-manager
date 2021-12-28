@@ -21,9 +21,9 @@
 }
 
 .hide-element {
-    display: none;
+    display: none !important;
 }
 
 .show-element {
-    display: block;
+    display: block !important;
 }

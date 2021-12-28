@@ -1,34 +1,6 @@
-import {BASE_URL, CARDS_URL, ROOT} from "./Constants.js";
-
-function getAllCards() {
-    fetch(BASE_URL + CARDS_URL,
-        {
-            method: 'GET',
-            headers: {
-                "Content-Type": "application/json",
-                'Accept': 'application/json',
-                'Authorization': 'Bearer ced8be37-1946-4c27-bef1-c539280ffb2c'
-            },
-        }).then(response => response.json()).then(answ => {
-        if (answ.length > 0) {
-            answ.forEach(el => {
-                const noData = document.getElementById('no-data');
-                if (noData) {
-                    noData.remove();
-                }
-                localStorage.setItem('cards', JSON.stringify(el));
-                let cars = new Cards(el);
-                cars.createCard();
-            })
-        } else {
-            const nodataInfo = document.createElement('p');
-            nodataInfo.setAttribute('id', 'no-data');
-            nodataInfo.textContent = 'No items have been added';
-            ROOT.append(nodataInfo);
-        }
-    })
-}
-
+import {ROOT, STATUS_OK} from "./Constants.js";
+import request from './Requests.js';
+import alertMessage from './Alert.js';
 
 class Cards {
 
@@ -38,7 +10,7 @@ class Cards {
 
     createCard() {
         const card = document.createElement('div')
-        card.setAttribute('id', this.visit.visitId);
+        card.setAttribute('id', this.visit.id);
         card.className = "card border-info text-black bg-light mb-3";
         this.createHeader(card);
         this.createBody(card);
@@ -95,45 +67,108 @@ class Cards {
         cardBodyTitle.className = 'card-body__title';
         cardBodyTitle.textContent = 'Пацієнт: Іванов Петро';
         cardBody.append(cardBodyTitle);
-        const additionalInfo = document.createElement('span');
-        additionalInfo.className = "additional-info hide-element"
-        additionalInfo.textContent = 'інформація 1,інформація 2,інформація 3,інформація 4'
-        this.createAdditionalInfo()
-        cardBody.append(additionalInfo)
-        this.additionalInfo = additionalInfo;
+        this.createAdditionalInfo(cardBody)
         card.append(cardBody);
     }
 
     createButtons(card) {
+        this.createOneBtn('btn btn-info', 'Показати більше', this.showAdditionalInfo, card);
+        this.createOneBtn('btn btn-warning', 'Редагувати', this.editCard, card);
+    }
+
+    createOneBtn(className, textContent, functionForListener, card) {
         const showMoreBtn = document.createElement('button');
         showMoreBtn.type = 'button';
-        showMoreBtn.className = 'btn btn-info';
-        showMoreBtn.textContent = 'Показати більше';
+        showMoreBtn.className = className;
+        showMoreBtn.textContent = textContent;
+        showMoreBtn.addEventListener("click", functionForListener.bind(event, this))
         card.append(showMoreBtn);
-        showMoreBtn.addEventListener("click", this.showAdditionalInfo.bind(event, this))
-        const showEdit = document.createElement('button');
-        showEdit.type = 'button';
-        showEdit.className = 'btn btn-warning';
-        showEdit.textContent = 'Редагувати';
-        card.append(showMoreBtn);
-        card.append(showEdit);
     }
 
     showAdditionalInfo(element) {
         element.additionalInfo.classList.replace('hide-element', 'show-element');
     }
 
+    editCard() {
+        console.log('edit card');
+    }
+
     deleteCardExecuted(element) {
-        element.cardElement.remove();
+        console.log(element);
+        request.delete(element.visit.id).then(response => {
+            if (response.status === STATUS_OK) {
+                element.cardElement.remove();
+                deleteCardFromStorage(element.visit.id);
+                if (checkStorage()) {
+                    renderNoDataExist();
+                }
+                alertMessage(`Card was deleted successful`, 'alert-info');
+            }
+        }).catch((error) => {
+            alertMessage(`Technical error`, 'alert-danger');
+        });
     };
 
-    createAdditionalInfo() {
+    createAdditionalInfo(cardBody) {
+        const additionalInfo = document.createElement('span');
+        additionalInfo.className = "additional-info hide-element"
+        additionalInfo.textContent = 'інформація 1,інформація 2,інформація 3,інформація 4'
+        cardBody.append(additionalInfo)
+        this.additionalInfo = additionalInfo;
         const allKeys = Object.keys(this.visit);
         console.log(allKeys);
     }
 
 }
 
+
+function getAllCards() {
+    request.get().then(response => response.json()).then(answ => {
+        if (answ.length > 0) {
+            alertMessage(`Received ${answ.length} card(s)`, 'alert-info');
+            addCardForStorage(answ);
+            answ.forEach(el => {
+                const noData = document.getElementById('no-data');
+                if (noData) {
+                    noData.remove();
+                }
+                let cars = new Cards(el);
+                cars.createCard();
+            })
+        } else {
+            alertMessage(`There are no cards`, 'alert-info');
+            renderNoDataExist();
+        }
+    }).catch((error) => {
+        alertMessage(`Technical error`, 'alert-danger');
+    });
+}
+
+function deleteCardFromStorage(elId) {
+    const listOfCards = JSON.parse(localStorage.getItem('cards'));
+    console.log(listOfCards);
+    const newArray = listOfCards.filter(el => el.id !== elId);
+    addCardForStorage(newArray);
+}
+
+function addCardForStorage(data) {
+    localStorage.setItem('cards', JSON.stringify(data));
+}
+
+function checkStorage() {
+    const listOfCards = JSON.parse(localStorage.getItem('cards'));
+    console.log(listOfCards);
+    console.log(listOfCards.length);
+    return listOfCards && listOfCards.length === 0;
+}
+
+function renderNoDataExist() {
+    const nodataInfo = document.createElement('p');
+    nodataInfo.setAttribute('id', 'no-data');
+    nodataInfo.textContent = 'No items have been added';
+    ROOT.append(nodataInfo);
+}
+
 export {
-    Cards, getAllCards
+    Cards, getAllCards, renderNoDataExist
 };
