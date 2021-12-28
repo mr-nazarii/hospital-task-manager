@@ -1,14 +1,39 @@
 import {BASE_URL, CARDS_URL, ROOT} from "./Constants.js";
 
+function getAllCards() {
+    fetch(BASE_URL + CARDS_URL,
+        {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ced8be37-1946-4c27-bef1-c539280ffb2c'
+            },
+        }).then(response => response.json()).then(answ => {
+        if (answ.length > 0) {
+            answ.forEach(el => {
+                const noData = document.getElementById('no-data');
+                if (noData) {
+                    noData.remove();
+                }
+                localStorage.setItem('cards', JSON.stringify(el));
+                let cars = new Cards(el);
+                cars.createCard();
+            })
+        } else {
+            const nodataInfo = document.createElement('p');
+            nodataInfo.setAttribute('id', 'no-data');
+            nodataInfo.textContent = 'No items have been added';
+            ROOT.append(nodataInfo);
+        }
+    })
+}
+
 
 class Cards {
 
     constructor(visit) {
         this.visit = visit;
-    }
-
-    render() {
-
     }
 
     createCard() {
@@ -20,8 +45,6 @@ class Cards {
         this.createButtons(card);
         root.append(card);
         this.cardElement = card;
-
-
     }
 
     createHeader(card) {
@@ -75,6 +98,7 @@ class Cards {
         const additionalInfo = document.createElement('span');
         additionalInfo.className = "additional-info hide-element"
         additionalInfo.textContent = 'інформація 1,інформація 2,інформація 3,інформація 4'
+        this.createAdditionalInfo()
         cardBody.append(additionalInfo)
         this.additionalInfo = additionalInfo;
         card.append(cardBody);
@@ -103,8 +127,13 @@ class Cards {
         element.cardElement.remove();
     };
 
+    createAdditionalInfo() {
+        const allKeys = Object.keys(this.visit);
+        console.log(allKeys);
+    }
+
 }
 
 export {
-    Cards
+    Cards, getAllCards
 };

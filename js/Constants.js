@@ -5,5 +5,5 @@ const ROOT = document.getElementById("root");
 export {ROOT}
 
 export default {
-    BASE_URL, CARDS_URL
+    BASE_URL, CARDS_URL,
 };
