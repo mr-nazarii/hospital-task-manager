@@ -30,7 +30,7 @@ class Cards {
     createTitle(cardHeader) {
         const cardHeaderTitle = document.createElement('span');
         cardHeaderTitle.className = "card-header__title";
-        cardHeaderTitle.textContent = "Лікар: Кардіолог";
+        cardHeaderTitle.textContent = `Doctor: ${this.visit.selectDoctor}`;
         cardHeader.append(cardHeaderTitle);
     }
 
@@ -65,7 +65,7 @@ class Cards {
         cardBody.className = 'card-body';
         const cardBodyTitle = document.createElement('h5');
         cardBodyTitle.className = 'card-body__title';
-        cardBodyTitle.textContent = 'Пацієнт: Іванов Петро';
+        cardBodyTitle.textContent = `Patient: ${this.visit.name} ${this.visit.surname} `;
         cardBody.append(cardBodyTitle);
         this.createAdditionalInfo(cardBody)
         card.append(cardBody);
@@ -102,7 +102,7 @@ class Cards {
                 if (checkStorage()) {
                     renderNoDataExist();
                 }
-                alertMessage(`Card was deleted successful`, 'alert-info');
+                alertMessage(`Card was deleted successfully`, 'alert-info');
             }
         }).catch((error) => {
             alertMessage(`Technical error`, 'alert-danger');
@@ -112,12 +112,49 @@ class Cards {
     createAdditionalInfo(cardBody) {
         const additionalInfo = document.createElement('span');
         additionalInfo.className = "additional-info hide-element"
-        additionalInfo.textContent = 'інформація 1,інформація 2,інформація 3,інформація 4'
+        const allKeys = Object.keys(this.visit);
+        additionalInfo.textContent = this.mapAdditionalData(allKeys);
         cardBody.append(additionalInfo)
         this.additionalInfo = additionalInfo;
-        const allKeys = Object.keys(this.visit);
-        console.log(allKeys);
     }
+
+    mapAdditionalData(allKeys) {
+        const mySet = new Set();
+        allKeys.forEach(el=>{mySet.add(el)});
+        console.log('allKeys');
+        console.log(allKeys);
+        let totalAnswer = '';
+        const separator = ', '
+        if (mySet.has('age')) {
+            totalAnswer +=`Age : ${this.visit.age}`+separator;
+        }
+        if (mySet.has('purpose')) {
+            totalAnswer +=`Purpose of the Visit : ${this.visit.purpose}`+separator;
+        }
+        if (mySet.has('shortDesc')) {
+            totalAnswer +=`Short description of the Visit : ${this.visit.shortDesc}`+separator;
+        }
+        if (mySet.has('urgency')) {
+            totalAnswer +=`How urgent is the visit : ${this.visit.urgency}`+separator;
+        }
+        if (mySet.has('personalInfo')) {
+            totalAnswer +=`Full Name : ${this.visit.personalInfo}`+separator;
+        }
+        if (mySet.has('dateLastVisit')) {
+            totalAnswer +=`Last Visit to the Doctor : ${this.visit.dateLastVisit}`+separator;
+        }
+        if (mySet.has('bloodPresure')) {
+            totalAnswer +=`Your regular blood pressure : ${this.visit.bloodPresure}`+separator;
+        }
+        if (mySet.has('index')) {
+            totalAnswer +=`Body mass index : ${this.visit.index}`+separator;
+        }
+        if (mySet.has('pastDes')) {
+            totalAnswer +=`Past diseases of the cardiovascular system : ${this.visit.pastDes}`+separator;
+        }
+        return totalAnswer;
+    }
+
 
 }
 
