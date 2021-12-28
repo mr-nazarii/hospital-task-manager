@@ -10,5 +10,5 @@ export default function alertMessage(message, alertType) {
   // rmove this alert
   setTimeout(() => {
     alert.remove();
-  }, 6000);
+  }, 2000);
 }

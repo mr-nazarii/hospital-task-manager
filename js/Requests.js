@@ -34,7 +34,7 @@ class Requests {
     return options;
   }
 
-  
+
 
   login(data) {
     this.url = LOGIN_URL;
@@ -43,7 +43,7 @@ class Requests {
 
   delete(id) {
     this.url = CARDS_URL;
-    return this.fetchMethod();
+    return this.fetchMethod('delete', id);
   }
   put(id) {
     this.url = CARDS_URL;

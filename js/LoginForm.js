@@ -1,7 +1,7 @@
 import Modal from './Modal.js';
 import request from './Requests.js';
 import alertMessage from './Alert.js';
-
+import {Cards as Cards, getAllCards} from "./Cards.js";
 import template from './Template.js';
 
 
@@ -27,7 +27,7 @@ export default class LoginForm {
 
   render() {
     const form = document.createElement('form');
-    
+
     // fields
     const email = this.inputCreate(
       'input',
@@ -71,26 +71,27 @@ export default class LoginForm {
           // сохраняем данные
           // console.log(data);
           localStorage.token = data;
-
+          getAllCards();
+          template.loadHeader(document.getElementById('login'));
           // загрузка страницы залогиненого пользователя
           // fetch за всеми карточками
           // request.posts()
-          request
-            .get()
-            .then((resp) => resp.text())
-            .then((data) => {
-              localStorage.cards = JSON.stringify(data);
-              template.loadHeader(document.getElementById('login'));
-              template.loadBody(data);
-
-            })
-            .catch((e) => console.log(e));
+          // request
+          //   .get()
+          //   .then((resp) => resp.text())
+          //   .then((data) => {
+          //     localStorage.cards = JSON.stringify(data);
+          //     template.loadHeader(document.getElementById('login'));
+          //     template.loadBody(data);
+          //
+          //   })
+          //   .catch((e) => console.log(e));
 
           // скрываем модальное
           this.loginModal.remove();
         });
       })
-      .catch((e) => console.log(e)); 
+      .catch((e) => console.log(e));
   }
 }
 
