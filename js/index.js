@@ -1,3 +1,40 @@
+import alertMessage from './Alert.js';
+import LoginForm from './LoginForm.js';
+
+import request from './Requests.js';
+import template from './Template.js';
+
+
+
+class App {
+  constructor(loginBtn, root) {
+    this.loginBtn = loginBtn;
+    this.root = root;
+    this.token = localStorage.token;
+    this.loadPage();
+  }
+
+  loadPage() {
+    if(this.token) {
+      // const request = new Requests();
+      request
+        .get()
+        .then((resp) => resp.text())
+        .then((data) => {
+          template.loadHeader(this.loginBtn);
+          template.loadBody(data);
+          getAllCards();
+        })
+        .catch((e) => console.log(e));
+    } else {
+      document.getElementById('login').addEventListener('click', () => {
+        const login = new LoginForm();
+      });
+    }
+  }
+}
+
+
 "use strict";
 import {Cards as Cards, getAllCards} from "./Cards.js";
 import Requests from "./Requests.js";
@@ -16,13 +53,6 @@ import {BASE_URL, CARDS_URL, ROOT} from "./Constants.js";
 //     console.log(answ);
 // })
 
-getAllCards();
+const appBtn =  document.getElementById('login');
 
-// const cards = new Cards({visitId: '3325'})
-// cards.createCard();
-// const cards2 = new Cards({visitId: '3326'})
-// cards2.createCard();
-// const cards3 = new Cards({visitId: '3327'})
-// cards3.createCard();
-// const cards4 = new Cards({visitId: '3328'})
-// cards4.createCard();
+const app = new App(appBtn, root);
