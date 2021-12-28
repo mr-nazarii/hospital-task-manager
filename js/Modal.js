@@ -55,6 +55,7 @@ export default class Modal {
     btnSubmit.classList.add("btn");
     btnSubmit.classList.add("btn-success");
     btnSubmit.innerHTML = "Submit";
+    btnSubmit.id = "submit";
     btnSubmit.setAttribute("data-bs-dismiss", "modal");
 
     const btnClose = document.createElement("button");

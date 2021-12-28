@@ -98,7 +98,8 @@ class Visit {
     typeInp,
     elementsValue,
     classParm = "form-control",
-    item = "input"
+    item = "input",
+    requiredElem = true
   ) {
     const label = document.createElement("label");
     const br = document.createElement("br");
@@ -112,7 +113,7 @@ class Visit {
     input.type = typeInp;
     input.id = elementsValue;
 
-    input.required = true;
+    input.required = requiredElem;
     input.classList.add(classParm);
     label.classList.add("me-3");
 
@@ -159,17 +160,14 @@ class VisitDentist extends Visit {
 
     this.standardQuestions(div);
 
-    const label = document.createElement("label");
-    label.innerHTML = this.dateLastVisit;
-    label.classList.add("form-label");
-    div.append(label);
-
-    const input = document.createElement("input");
-    input.type = "date";
-
-    input.required = true;
-    input.classList.add("form-control");
-    div.append(input);
+    this.repeat(
+      div,
+      this.dateLastVisit,
+      "date",
+      "date",
+      "form-control",
+      "input"
+    );
 
     return div;
   }
@@ -199,7 +197,9 @@ class VisitCardiologist extends Visit {
       this.pastDes,
       "checkbox",
       "pastDesease",
-      "form-check-input"
+      "form-check-input",
+      "input",
+      false
     );
     this.repeat(div, this.age, "number", "age");
 
@@ -219,17 +219,7 @@ class VisitTherapist extends Visit {
 
     this.standardQuestions(div);
 
-    const label = document.createElement("label");
-    label.innerHTML = this.age;
-    label.classList.add("form-label");
-    div.append(label);
-
-    const input = document.createElement("input");
-    input.type = "number";
-
-    input.required = true;
-    input.classList.add("form-control");
-    div.append(input);
+    this.repeat(div, this.age, "number", "age", "form-control", "input");
 
     return div;
   }
