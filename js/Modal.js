@@ -1,7 +1,8 @@
 export default class Modal {
-  constructor(title, innerBody = "") {
+  constructor(title, innerBody = "", login = false) {
     this.title = title;
     this.innerBody = innerBody;
+    this.login = login;
     this.render();
   }
 
@@ -46,46 +47,60 @@ export default class Modal {
     modalBody.id = "modal-body";
     modalBody.append(this.innerBody);
 
-    // Modal Footer
-    const modalFooter = document.createElement("div");
-    modalFooter.classList.add("modal-footer");
+    if (this.login) {
+      modalContent.append(modalHeader, modalBody);
 
-    const btnSubmit = document.createElement("button");
-    btnSubmit.type = "submit";
-    btnSubmit.setAttribute("form", "visit-form");
-    btnSubmit.classList.add("btn");
-    btnSubmit.classList.add("btn-success");
-    btnSubmit.innerHTML = "Submit";
-    btnSubmit.id = "submit";
+      modalDialog.append(modalContent);
 
-    const btnClose = document.createElement("button");
-    btnClose.type = "button";
-    btnClose.classList.add("btn");
-    btnClose.classList.add("btn-secondary");
-    btnClose.innerHTML = "Close";
+      modalWrapper.append(modalDialog);
 
-    btnClose.setAttribute("data-bs-dismiss", "modal");
+      this.newModal = new bootstrap.Modal(modalWrapper);
 
-    modalFooter.append(btnSubmit, btnClose);
+      this.newModal.show();
 
-    modalContent.append(modalHeader, modalBody, modalFooter);
+      modalWrapper.addEventListener("hidden.bs.modal", (e) => {
+        modalWrapper.remove();
+      });
+    } else {
+      // Modal Footer
+      const modalFooter = document.createElement("div");
+      modalFooter.classList.add("modal-footer");
 
-    modalDialog.append(modalContent);
+      const btnSubmit = document.createElement("button");
+      btnSubmit.type = "submit";
+      btnSubmit.setAttribute("form", "visit-form");
+      btnSubmit.classList.add("btn");
+      btnSubmit.classList.add("btn-success");
+      btnSubmit.innerHTML = "Submit";
+      btnSubmit.id = "submit";
 
-    modalWrapper.append(modalDialog);
+      const btnClose = document.createElement("button");
+      btnClose.type = "button";
+      btnClose.classList.add("btn");
+      btnClose.classList.add("btn-secondary");
+      btnClose.innerHTML = "Close";
 
-    this.newModal = new bootstrap.Modal(modalWrapper);
+      btnClose.setAttribute("data-bs-dismiss", "modal");
 
-    this.newModal.show();
+      modalFooter.append(btnSubmit, btnClose);
 
-    modalWrapper.addEventListener("hidden.bs.modal", (e) => {
-      modalWrapper.remove();
-    });
+      modalContent.append(modalHeader, modalBody, modalFooter);
 
+      modalDialog.append(modalContent);
+
+      modalWrapper.append(modalDialog);
+
+      this.newModal = new bootstrap.Modal(modalWrapper);
+
+      this.newModal.show();
+
+      modalWrapper.addEventListener("hidden.bs.modal", (e) => {
+        modalWrapper.remove();
+      });
+    }
   }
 
   remove() {
     this.newModal.hide();
   }
 }
-

@@ -1,5 +1,6 @@
 import request from "./Requests.js";
 import Modal from "./Modal.js";
+import { Cards as Cards, getAllCards, renderNoDataExist } from "./Cards.js";
 
 export default class VisitForm {
   constructor(innerForm) {
@@ -16,11 +17,14 @@ export default class VisitForm {
 
     this.VisitFormModal = new Modal("Visit", form);
 
+    setTimeout(() => {
+      const submit = document.querySelector("#submit");
+      submit.disabled = true;
+    }, 200);
+
     form.addEventListener("submit", (e) => {
       e.preventDefault();
 
-      // this.checkIfFilled(form);
-      console.log(e);
       let obj = {};
       if (form.reportValidity()) {
         for (const i of e.target.elements) {
@@ -31,7 +35,6 @@ export default class VisitForm {
           }
         }
         delete obj.submit;
-        console.log(obj);
 
         this.VisitFormModal.remove();
 
@@ -44,6 +47,8 @@ export default class VisitForm {
           .then((response) => {
             localStorage.cards = JSON.stringify(response);
           });
+
+        getAllCards();
       }
     });
   }
