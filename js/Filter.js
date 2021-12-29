@@ -1,4 +1,3 @@
-// import { ROOT } from "./Constants.js";
 export default class Filter {
     constructor(root) {
         this.root = root;
@@ -106,7 +105,6 @@ export default class Filter {
 
     filterData() {
         let cards = JSON.parse(localStorage.getItem('cards'));
-        console.log(cards);
 
         let inputTitle = document.getElementById('input-title-filter-id');
         let selectStatus = document.getElementById('status-filter-id');
@@ -148,12 +146,12 @@ export default class Filter {
 
     }
     getStatus(appointmentDate) {
-        let currentDate = Date.now();
-        let cardDate = Date.parse(appointmentDate);
+        let currentDate = new Date();
+        let cardDate = new Date(appointmentDate);
 
-        if ((cardDate - currentDate) < 0) {
-            return 'Done'
-        } else return 'Open'
+        if ((cardDate - currentDate.setUTCHours(0, 0, 0, 0)) < 0) {
+            return 'Done';
+        } else return 'Open';
     }
 
     createfilterInfo() {
@@ -165,9 +163,3 @@ export default class Filter {
     }
 
 }
-
-// export function getFilter() {
-//     let filter = new Filter(ROOT);
-//     filter.createFilterForm();
-// }
-
