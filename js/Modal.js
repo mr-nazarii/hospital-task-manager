@@ -1,60 +1,91 @@
 export default class Modal {
-  constructor(element) {
-    this.element = element;
-    this.render(element);
+  constructor(title, innerBody = "") {
+    this.title = title;
+    this.innerBody = innerBody;
+    this.render();
   }
 
   render() {
-    const modal = document.createElement('div');
-    modal.classList.add('modal', 'fade');
-    modal.setAttribute('tabindex', '-1');
+    // Wrapper
 
-    const modalDialog = document.createElement('div');
-    modalDialog.classList.add('modal-dialog');
+    const modalWrapper = document.createElement("div");
+    modalWrapper.classList.add("modal");
+    modalWrapper.classList.add("fade");
 
-    const modalContent = document.createElement('div');
-    modalContent.classList.add('modal-content');
+    modalWrapper.id = "modal";
+    modalWrapper.tabIndex = "-1";
+    modalWrapper.setAttribute("aria-labelledby", "visitLabel");
+    modalWrapper.ariaHidden = true;
 
-    const modalHeader = document.createElement('div');
-    modalHeader.classList.add('modal-header');
+    // Modal Dialog
+    const modalDialog = document.createElement("div");
+    modalDialog.classList.add("modal-dialog");
 
-    const closeModal = document.createElement('button');
-    closeModal.classList.add('btn-close');
-    closeModal.setAttribute('data-bs-dismiss', 'modal');
+    // Modal Content
+    const modalContent = document.createElement("div");
+    modalContent.classList.add("modal-content");
 
-    const modalBody = document.createElement('div');
-    modalBody.classList.add('modal-body');
+    // Modal Header
+    const modalHeader = document.createElement("div");
+    modalHeader.classList.add("modal-header");
 
-    const modalTitle = document.createElement('div');
-    modalTitle.classList.add('modal-title');
-    // modalTitle.textContent = title;
+    const modalTitle = document.createElement("h5");
+    modalTitle.classList.add("modal-title");
+    modalTitle.innerHTML = this.title;
 
-    // тут добавлю в модальное переданный параметр
-    modalBody.append(this.element);
+    const btnCloseCross = document.createElement("button");
+    btnCloseCross.classList.add("btn-close");
+    btnCloseCross.setAttribute("data-bs-dismiss", "modal");
+    btnCloseCross.setAttribute("aria-labe", "Close");
 
-    // console.log(newModal)
-    modal.append(modalDialog);
+    modalHeader.append(modalTitle, btnCloseCross);
+
+    // Modal Body
+    const modalBody = document.createElement("div");
+    modalBody.classList.add("modal-body");
+    modalBody.id = "modal-body";
+    modalBody.append(this.innerBody);
+
+    // Modal Footer
+    const modalFooter = document.createElement("div");
+    modalFooter.classList.add("modal-footer");
+
+    const btnSubmit = document.createElement("button");
+    btnSubmit.type = "submit";
+    btnSubmit.setAttribute("form", "visit-form");
+    btnSubmit.classList.add("btn");
+    btnSubmit.classList.add("btn-success");
+    btnSubmit.innerHTML = "Submit";
+    btnSubmit.id = "submit";
+
+    const btnClose = document.createElement("button");
+    btnClose.type = "button";
+    btnClose.classList.add("btn");
+    btnClose.classList.add("btn-secondary");
+    btnClose.innerHTML = "Close";
+
+    btnClose.setAttribute("data-bs-dismiss", "modal");
+
+    modalFooter.append(btnSubmit, btnClose);
+
+    modalContent.append(modalHeader, modalBody, modalFooter);
+
     modalDialog.append(modalContent);
-    modalContent.append(modalHeader, modalBody);
-    modalHeader.append(closeModal);
 
-    // document.body.append(modal);
+    modalWrapper.append(modalDialog);
 
-    this.newModal = new bootstrap.Modal(modal);
+    this.newModal = new bootstrap.Modal(modalWrapper);
 
     this.newModal.show();
 
-    modal.addEventListener('hidden.bs.modal', (e) => {
-      modal.remove();
+    modalWrapper.addEventListener("hidden.bs.modal", (e) => {
+      modalWrapper.remove();
     });
-
 
   }
 
   remove() {
     this.newModal.hide();
   }
-  
 }
-
 
