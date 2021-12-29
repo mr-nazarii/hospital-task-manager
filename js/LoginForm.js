@@ -1,9 +1,11 @@
 import Modal from './Modal.js';
 import request from './Requests.js';
 import alertMessage from './Alert.js';
-import {Cards as Cards, getAllCards} from "./Cards.js";
+import { Cards as Cards, getAllCards } from "./Cards.js";
 import template from './Template.js';
 
+import { BASE_URL, CARDS_URL, ROOT } from "./Constants.js";
+import Filter from "./Filter.js";
 
 
 
@@ -71,6 +73,8 @@ export default class LoginForm {
           // сохраняем данные
           // console.log(data);
           localStorage.token = data;
+          let filter1 = new Filter(ROOT);
+          filter1.createFilterForm();
           getAllCards();
           template.loadHeader(document.getElementById('login'));
           // загрузка страницы залогиненого пользователя

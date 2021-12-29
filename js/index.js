@@ -4,7 +4,10 @@ import LoginForm from './LoginForm.js';
 
 import request from './Requests.js';
 import template from './Template.js';
-import {Cards as Cards, getAllCards, renderNoDataExist} from "./Cards.js";
+import { Cards as Cards, getAllCards, renderNoDataExist } from "./Cards.js";
+
+import { BASE_URL, CARDS_URL, ROOT } from "./Constants.js";
+import Filter from "./Filter.js";
 
 
 "use strict";
@@ -17,18 +20,22 @@ class App {
   }
 
   loadPage() {
-    if(this.token) {
+    if (this.token) {
       // const request = new Requests();
-          template.loadHeader(this.loginBtn);
-          getAllCards();
-//       request
-//         .get()
-//         .then((resp) => resp.text())
-//         .then((data) => {
-//           template.loadHeader(this.loginBtn);
-//           getAllCards();
-//         })
-//         .catch((e) => console.log(e));
+      template.loadHeader(this.loginBtn);
+
+      let filterLoad = new Filter(this.root);
+      filterLoad.createFilterForm();
+
+      getAllCards();
+      //       request
+      //         .get()
+      //         .then((resp) => resp.text())
+      //         .then((data) => {
+      //           template.loadHeader(this.loginBtn);
+      //           getAllCards();
+      //         })
+      //         .catch((e) => console.log(e));
     } else {
       // renderNoDataExist();
       document.getElementById('login').addEventListener('click', () => {
@@ -39,8 +46,7 @@ class App {
 }
 
 
-import Requests from "./Requests.js";
-import {BASE_URL, CARDS_URL, ROOT} from "./Constants.js";
+// import Requests from "./Requests.js";
 //
 //
 // const constAllDataResponse = fetch(BASE_URL + CARDS_URL,
@@ -55,6 +61,6 @@ import {BASE_URL, CARDS_URL, ROOT} from "./Constants.js";
 //     console.log(answ);
 // })
 
-const appBtn =  document.getElementById('login');
+const appBtn = document.getElementById('login');
 
 const app = new App(appBtn, root);
