@@ -1,5 +1,6 @@
-const CARDS_URL = "https://ajax.test-danit.com/api/v2/cards";
-const LOGIN_URL = "https://ajax.test-danit.com/api/v2/cards/login";
+
+const CARDS_URL = 'https://ajax.test-danit.com/api/v2/cards';
+const LOGIN_URL = 'https://ajax.test-danit.com/api/v2/cards/login';
 
 class Requests {
   constructor() {
@@ -25,7 +26,7 @@ class Requests {
   setOptions(method, data) {
     const options = {
       method: method,
-      headers: this.setHeaders({ "Content-Type": "application/json" }),
+      headers: this.setHeaders({ 'Content-Type': 'application/json' }),
     };
     if (data !== null) {
       options.body = JSON.stringify(data);
@@ -34,14 +35,17 @@ class Requests {
     return options;
   }
 
+
+
   login(data) {
     this.url = LOGIN_URL;
-    return this.fetchMethod("POST", "", data);
+    return this.fetchMethod('POST', '', data);
   }
 
   delete(id) {
     this.url = CARDS_URL;
-    return this.fetchMethod("delete", id);
+
+    return this.fetchMethod('delete', id);
   }
   put(id) {
     this.url = CARDS_URL;
@@ -50,16 +54,17 @@ class Requests {
 
   post(obj) {
     this.url = CARDS_URL;
-    return this.fetchMethod("post", "", obj);
+
+    return this.fetchMethod('post', '', obj);
   }
 
-  get(id = "") {
+  get(id = '') {
     this.url = CARDS_URL;
-    return this.fetchMethod("get", id);
+    return this.fetchMethod('get', id);
   }
 
   fetchMethod(method, id, data = null) {
-    return fetch(this.url + "/" + id, this.setOptions(method, data));
+    return fetch(this.url + '/' + id, this.setOptions(method, data));
   }
 }
 

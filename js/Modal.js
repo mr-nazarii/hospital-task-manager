@@ -81,9 +81,11 @@ export default class Modal {
     modalWrapper.addEventListener("hidden.bs.modal", (e) => {
       modalWrapper.remove();
     });
+
   }
 
   remove() {
     this.newModal.hide();
   }
 }
+
