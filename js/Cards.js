@@ -1,3 +1,4 @@
+
 import {ROOT, STATUS_OK} from "./Constants.js";
 import request from './Requests.js';
 import alertMessage from './Alert.js';
@@ -209,3 +210,4 @@ function renderNoDataExist() {
 export {
     Cards, getAllCards, renderNoDataExist
 };
+

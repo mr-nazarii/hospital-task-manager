@@ -1,3 +1,4 @@
+
 const BASE_URL = 'https://ajax.test-danit.com';
 const CARDS_URL = '/api/v2/cards'
 const ROOT = document.getElementById("root");
