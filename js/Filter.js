@@ -1,5 +1,5 @@
-import { ROOT } from "./Constants.js";
-class Filter {
+// import { ROOT } from "./Constants.js";
+export default class Filter {
     constructor(root) {
         this.root = root;
     }
@@ -165,9 +165,8 @@ class Filter {
 
 }
 
-export function getFilter() {
-    let filter = new Filter(ROOT);
-    filter.createFilterForm();
-}
+// export function getFilter() {
+//     let filter = new Filter(ROOT);
+//     filter.createFilterForm();
+// }
 
-export default Filter
