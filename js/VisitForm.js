@@ -20,10 +20,10 @@ export default class VisitForm {
       e.preventDefault();
 
       // this.checkIfFilled(form);
-
+      console.log(e);
       let obj = {};
       if (form.reportValidity()) {
-        for (const i of e.path[0].elements) {
+        for (const i of e.target.elements) {
           if (i.id === "pastDesease") {
             obj[i.id] = i.checked;
           } else {
@@ -34,8 +34,6 @@ export default class VisitForm {
         console.log(obj);
 
         this.VisitFormModal.remove();
-
-        localStorage.token = "d544d67d-2341-45b4-85e6-b7a7bad957fe";
 
         request.post(obj);
         request
