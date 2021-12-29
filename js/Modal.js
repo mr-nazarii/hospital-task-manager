@@ -2,6 +2,7 @@ export default class Modal {
   constructor(title, innerBody = "") {
     this.title = title;
     this.innerBody = innerBody;
+    this.render();
   }
 
   render() {
@@ -56,7 +57,6 @@ export default class Modal {
     btnSubmit.classList.add("btn-success");
     btnSubmit.innerHTML = "Submit";
     btnSubmit.id = "submit";
-    btnSubmit.setAttribute("data-bs-dismiss", "modal");
 
     const btnClose = document.createElement("button");
     btnClose.type = "button";
@@ -74,10 +74,16 @@ export default class Modal {
 
     modalWrapper.append(modalDialog);
 
-    return modalWrapper;
+    this.newModal = new bootstrap.Modal(modalWrapper);
 
-    // if (this.innerBody) {
-    //   modalBody.append(this.innerBody);
-    // }
+    this.newModal.show();
+
+    modalWrapper.addEventListener("hidden.bs.modal", (e) => {
+      modalWrapper.remove();
+    });
+  }
+
+  remove() {
+    this.newModal.hide();
   }
 }

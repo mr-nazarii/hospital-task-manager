@@ -5,11 +5,13 @@ class Visit {
     this.urgency = "How urgent is the visit";
     this.personalInfo = "Full Name";
     this.date = "When to schedule the appointment";
+    this.fullname = "Your full name";
+    this.comments = "*(Optional) Your coments";
   }
 
   render() {
     const select = document.createElement("select");
-    select.id = "select-doctor";
+    select.id = "selectDoctor";
     select.classList.add("form-select");
 
     const docs = ["Dentist", "Cardiologist", "Therapist"];
@@ -25,6 +27,7 @@ class Visit {
   }
 
   standardQuestions(div) {
+    this.repeat(div, this.fullname, "text", "fullname");
     this.repeat(div, this.purpose, "text", "purpose");
     this.repeatTextArea(
       div,
@@ -75,6 +78,15 @@ class Visit {
     input.classList.add("form-control");
     div.append(input);
     this.br(div);
+
+    this.repeatTextArea(
+      div,
+      this.comments,
+      "comments",
+      "form-control",
+      "textarea",
+      false
+    );
   }
 
   label(div, key, form, element) {
@@ -126,7 +138,8 @@ class Visit {
     phrase,
     elementsValue,
     classParm = "form-control",
-    item = "input"
+    item = "input",
+    requiredElem = true
   ) {
     const label = document.createElement("label");
     const br = document.createElement("br");
@@ -139,7 +152,7 @@ class Visit {
     const input = document.createElement(item);
     input.id = elementsValue;
 
-    input.required = true;
+    input.required = requiredElem;
     input.classList.add(classParm);
     label.classList.add("me-3");
 
