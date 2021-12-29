@@ -14,27 +14,27 @@ export default class Cards {
     createCards() {
 
 
-        this.arrCards.forEach(({ id, title, description, status, urgency }) => {
+        this.arrCards.forEach(({ id, purpose, shortDesc, appointmentDate, urgency }) => {
             const liCard = document.createElement('li');
-            console.log(id);
+            // console.log(id);
             liCard.id = id;
 
             let idH3 = document.createElement('h3');
             idH3.textContent = `id: ${id}`;
 
-            let titleH3 = document.createElement('h3');
-            titleH3.textContent = title;
+            let purposeH3 = document.createElement('h3');
+            purposeH3.textContent = purpose;
 
-            let descriptionP = document.createElement('p');
-            descriptionP.textContent = `description: ${description}`;
+            let shortDescP = document.createElement('p');
+            shortDescP.textContent = `shortDesc: ${shortDesc}`;
 
-            let statusP = document.createElement('p');
-            statusP.textContent = `status: ${status}`;
+            let appointmentDateP = document.createElement('p');
+            appointmentDateP.textContent = `appointmentDate: ${appointmentDate}`;
 
             let urgencyP = document.createElement('p');
             urgencyP.textContent = `urgency: ${urgency}`;
 
-            liCard.append(idH3, titleH3, descriptionP, statusP, urgencyP)
+            liCard.append(idH3, purposeH3, shortDescP, appointmentDateP, urgencyP)
             this.list.append(liCard);
         });
 
