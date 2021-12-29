@@ -105,7 +105,8 @@ export default class Filter {
     }
 
     filterData() {
-        let cards = JSON.parse(localStorage.getItem('myTestCards'));
+        let cards = JSON.parse(localStorage.getItem('cards'));
+        console.log(cards);
 
         let inputTitle = document.getElementById('input-title-filter-id');
         let selectStatus = document.getElementById('status-filter-id');
