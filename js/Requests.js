@@ -1,3 +1,4 @@
+
 const CARDS_URL = 'https://ajax.test-danit.com/api/v2/cards';
 const LOGIN_URL = 'https://ajax.test-danit.com/api/v2/cards/login';
 
@@ -43,6 +44,7 @@ class Requests {
 
   delete(id) {
     this.url = CARDS_URL;
+
     return this.fetchMethod('delete', id);
   }
   put(id) {
@@ -52,6 +54,7 @@ class Requests {
 
   post(obj) {
     this.url = CARDS_URL;
+
     return this.fetchMethod('post', '', obj);
   }
 
