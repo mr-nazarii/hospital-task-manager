@@ -48,7 +48,7 @@ export default class LoginForm {
 
     form.append(email, password, submit);
 
-    this.loginModal = new Modal(form);
+    this.loginModal = new Modal('Login', form);
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
