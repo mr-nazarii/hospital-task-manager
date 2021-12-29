@@ -1,103 +1,102 @@
-'use strict';
 
-import { ROOT, BASE_URL as URL } from "./Constants.js";
-import Filter from './Filter.js'
-import { getFilter } from './Filter.js';
+import alertMessage from './Alert.js';
+import LoginForm from './LoginForm.js';
 
+import request from './Requests.js';
+import template from './Template.js';
+import {Cards as Cards, getAllCards, renderNoDataExist} from "./Cards.js";
+import VisitForm from "./VisitForm.js";
+import {
+  Visit,
+  VisitDentist,
+  VisitCardiologist,
+  VisitTherapist,
+} from "./Visit.js";
 
-import Requests from './Requests.js';
-import Cards from './Cards.js';
-import Token from './Token.js';
-import { loginData } from './Token.js';
+"use strict";
+class App {
+  constructor(loginBtn, root) {
+    this.loginBtn = loginBtn;
+    this.root = root;
+    this.token = localStorage.token;
+    this.loadPage();
+  }
 
-
-getFilter();
-
-const root = document.getElementById('root');
-
-// localStorage.removeItem('token')
-
-if (!localStorage.getItem('token')) {
-    let token = new Token(URL);
-    token.getToken(loginData);
+  loadPage() {
+    if(this.token) {
+      // const request = new Requests();
+          template.loadHeader(this.loginBtn);
+          getAllCards();
+//       request
+//         .get()
+//         .then((resp) => resp.text())
+//         .then((data) => {
+//           template.loadHeader(this.loginBtn);
+//           getAllCards();
+//         })
+//         .catch((e) => console.log(e));
+    } else {
+      renderNoDataExist();
+      document.getElementById('login').addEventListener('click', () => {
+        const login = new LoginForm();
+      });
+    }
+  }
 }
 
+// const modalBody = document.getElementById("visit-form");
+// const selectDoctor = document.getElementById("selectDoctor");
+// const login = document.getElementById("login");
 
-const visit =
-// {
-//     purpose: 'К кардиологу',
-//     shortDesc: 'Консультация',
-//     appointmentDate: '2021-12-30',
-//     doctor: 'Cardiologist',
-//     // status: 'open',
-//     urgency: 'Medium',
-//     bp: '34',
-//     age: 35,
-//     weight: 80
-// }
-// {
-//     purpose: 'Визит к стоматологу',
-//     shortDesc: 'Плановый визит',
-//     doctor: 'Dentist',
-//     appointmentDate: '2022-01-11',
-//     urgency: 'High',
-//     bp: '28',
-//     age: 38,
-//     weight: 77
-// }
-// {
-//     purpose: 'Визит к терапевту',
-//     shortDesc: 'медицинский осмотр',
-//     doctor: 'Therapist',
-//     appointmentDate: '2021-11-11',
-//     urgency: 'Low',
-//     bp: '22',
-//     age: 30,
-//     weight: 75
-// }
-// {
-//     purpose: 'Визит к стоматологу',
-//     shortDesc: 'Плановый визит',
-//     doctor: 'Dentist',
-//     appointmentDate: '2021-10-10',
-//     urgency: 'Medium',
-//     bp: '27',
-//     age: 34,
-//     weight: 80
-// }
-{
-    purpose: 'Визит к кардиологу',
-    shortDesc: 'Плановый визит',
-    doctor: 'Cardiologist',
-    appointmentDate: '2022-01-10',
-    urgency: 'High',
-    bp: '24',
-    age: 23,
-    weight: 70
-};
+// // const modal = new Modal("Visit", visitForm.render());
+// login.addEventListener("click", () => {
+//   const innerForm = new Visit();
+//   const visitForm = new VisitForm(innerForm.render());
+//   visitForm.render();
 
+//   const visitDentist = new VisitDentist();
+//   const visitCardiologist = new VisitCardiologist();
+//   const visitTherapist = new VisitTherapist();
 
-// let requestPost = new Requests(URL);
-// requestPost.post(JSON.stringify(visit)).then(request => request.json()).then(data => console.log(data));
+//   setTimeout(() => {
+//     const selectDoctor = document.getElementById("selectDoctor");
 
+//     selectDoctor.addEventListener("change", (e) => {
+//       if (selectDoctor.value === "dentist") {
+//         const div = document.querySelector("#doctor-form");
 
-// let delRequest = new Requests(URL);
-// delRequest.delete(37799).then(request => console.log(request));
+//         div.replaceWith(visitDentist.render());
+//       } else if (selectDoctor.value === "cardiologist") {
+//         const div = document.querySelector("#doctor-form");
 
-// let requestPut = new Requests(URL);
-// requestPut.put(JSON.stringify(visit), '37727').then(request => request.json()).then(data => console.log(data));
+//         div.replaceWith(visitCardiologist.render());
+//       } else if (selectDoctor.value === "therapist") {
+//         const div = document.querySelector("#doctor-form");
+
+//         div.replaceWith(visitTherapist.render());
+//       }
+//     });
+//   }, 200);
+// });
 
 
 
-let getRequest = new Requests(URL);
-getRequest.get()
-    .then(request => request.json())
-    .then(data => {
-        // console.log(data);
-        localStorage.setItem('myTestCards', JSON.stringify(data));
-        let storageCards = JSON.parse(localStorage.getItem('myTestCards'));
-        // console.log(storageCards);
-        let cards = new Cards(data, root);
-        cards.createCards();
-    });
+import Requests from "./Requests.js";
+import {BASE_URL, CARDS_URL, ROOT} from "./Constants.js";
+//
+//
+// const constAllDataResponse = fetch(BASE_URL + CARDS_URL,
+//     {
+//         method: 'GET',
+//         headers: {
+//             "Content-Type": "application/json",
+//             'Accept': 'application/json',
+//             'Authorization': 'Bearer ced8be37-1946-4c27-bef1-c539280ffb2c'
+//         },
+//     }).then(response => response.json()).then(answ => {
+//     console.log(answ);
+// })
 
+const appBtn =  document.getElementById('login');
+
+const app = new App(appBtn, root);
