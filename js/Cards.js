@@ -1,7 +1,7 @@
-
-import {ROOT, STATUS_OK} from "./Constants.js";
+import { ROOT, STATUS_OK } from "./Constants.js";
 import request from './Requests.js';
 import alertMessage from './Alert.js';
+import Filter from './Filter.js';
 
 class Cards {
 
@@ -66,7 +66,7 @@ class Cards {
         cardBody.className = 'card-body';
         const cardBodyTitle = document.createElement('h5');
         cardBodyTitle.className = 'card-body__title';
-        cardBodyTitle.textContent = `Patient: ${this.visit.name} ${this.visit.surname} `;
+        cardBodyTitle.textContent = `Patient: ${this.visit.fullname}`;
         cardBody.append(cardBodyTitle);
         this.createAdditionalInfo(cardBody)
         card.append(cardBody);
@@ -121,42 +121,57 @@ class Cards {
 
     mapAdditionalData(allKeys) {
         const mySet = new Set();
-        allKeys.forEach(el=>{mySet.add(el)});
+        allKeys.forEach(el => {
+            mySet.add(el)
+        });
         console.log('allKeys');
         console.log(allKeys);
         let totalAnswer = '';
         const separator = ', '
         if (mySet.has('age')) {
-            totalAnswer +=`Age : ${this.visit.age}`+separator;
+            totalAnswer += `Age : ${this.visit.age}` + separator;
         }
         if (mySet.has('purpose')) {
-            totalAnswer +=`Purpose of the Visit : ${this.visit.purpose}`+separator;
+            totalAnswer += `Purpose of the Visit : ${this.visit.purpose}` + separator;
         }
         if (mySet.has('shortDesc')) {
-            totalAnswer +=`Short description of the Visit : ${this.visit.shortDesc}`+separator;
+            totalAnswer += `Short description of the Visit : ${this.visit.shortDesc}` + separator;
         }
         if (mySet.has('urgency')) {
-            totalAnswer +=`How urgent is the visit : ${this.visit.urgency}`+separator;
-        }
-        if (mySet.has('personalInfo')) {
-            totalAnswer +=`Full Name : ${this.visit.personalInfo}`+separator;
+            totalAnswer += `How urgent is the visit : ${this.visit.urgency}` + separator;
         }
         if (mySet.has('dateLastVisit')) {
-            totalAnswer +=`Last Visit to the Doctor : ${this.visit.dateLastVisit}`+separator;
+            totalAnswer += `Last Visit to the Doctor : ${this.visit.dateLastVisit}` + separator;
         }
         if (mySet.has('bloodPresure')) {
-            totalAnswer +=`Your regular blood pressure : ${this.visit.bloodPresure}`+separator;
+            totalAnswer += `Your regular blood pressure : ${this.visit.bloodPresure}` + separator;
         }
         if (mySet.has('index')) {
-            totalAnswer +=`Body mass index : ${this.visit.index}`+separator;
+            totalAnswer += `Body mass index : ${this.visit.index}` + separator;
         }
         if (mySet.has('pastDes')) {
-            totalAnswer +=`Past diseases of the cardiovascular system : ${this.visit.pastDes}`+separator;
+            totalAnswer += `Past diseases of the cardiovascular system : ${this.visit.pastDes}` + separator;
+        }
+        if (mySet.has('appointmentDate')) {
+            totalAnswer += `Appointment Date : ${this.visit.appointmentDate}` + separator;
         }
         return totalAnswer;
     }
 
 
+}
+
+function addOneCard(response) {
+    console.log(response);
+    addOneCardForStorage(response);
+    let cars = new Cards(response);
+    cars.createCard();
+    const pToDelete = document.getElementById('no-data');
+    if (pToDelete) {
+        pToDelete.remove();
+    }
+    const filter = new Filter(ROOT);
+    filter.filterData();
 }
 
 
@@ -193,6 +208,20 @@ function addCardForStorage(data) {
     localStorage.setItem('cards', JSON.stringify(data));
 }
 
+function addOneCardForStorage(data) {
+    const listOfCards = JSON.parse(localStorage.getItem('cards'));
+    if (listOfCards && listOfCards.length > 0) {
+        console.log(listOfCards)
+        const listOfCardsParsed = JSON.parse(localStorage.getItem('cards'));
+        listOfCardsParsed.push(data);
+        localStorage.setItem('cards', JSON.stringify(listOfCardsParsed));
+    } else {
+        const array = [];
+        array.push(data);
+        localStorage.setItem('cards', JSON.stringify(array));
+    }
+}
+
 function checkStorage() {
     const listOfCards = JSON.parse(localStorage.getItem('cards'));
     console.log(listOfCards);
@@ -203,11 +232,12 @@ function checkStorage() {
 function renderNoDataExist() {
     const nodataInfo = document.createElement('p');
     nodataInfo.setAttribute('id', 'no-data');
+    nodataInfo.className = 'col-12 text-center';
     nodataInfo.textContent = 'No items have been added';
     ROOT.append(nodataInfo);
 }
 
 export {
-    Cards, getAllCards, renderNoDataExist
+    Cards, getAllCards, renderNoDataExist, addOneCard
 };
 

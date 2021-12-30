@@ -5,6 +5,7 @@ export default class Filter {
 
     createFilterForm() {
         let container = document.createElement('div');
+        container.id = 'filterWrapId';
         container.className = 'container border rounded py-2 my-3 bg-light mx-auto justify-content-md-center';
 
         let filterForm = document.createElement('form');
@@ -62,7 +63,7 @@ export default class Filter {
     createSelectOptions(options, select) {
         options.forEach((elValue) => {
             let option = document.createElement('option');
-            option.value = elValue;
+            option.value = elValue.toLowerCase();
             option.textContent = elValue;
             select.append(option);
 
@@ -91,14 +92,17 @@ export default class Filter {
 
         buttonSearch.addEventListener('click', (e) => {
             e.preventDefault();
-            this.filterData();
-
+            if (JSON.parse(localStorage.getItem('cards')).length > 0) {
+                this.filterData();
+            }
         });
+
         buttonReset.addEventListener('click', (e) => {
             e.preventDefault();
             filterForm.reset();
-            this.filterData();
-
+            if (JSON.parse(localStorage.getItem('cards')).length > 0) {
+                this.filterData();
+            }
         })
 
     }
@@ -125,9 +129,9 @@ export default class Filter {
                 titleCard.indexOf(inputForm) < 0 &&
                 descriptionCard.indexOf(inputForm) < 0 ||
                 statusVisit !== selectStatus.value &&
-                selectStatus.value !== 'All' ||
-                card.urgency !== selectUrgency.value &&
-                selectUrgency.value !== 'All'
+                selectStatus.value !== 'all' ||
+                card.urgency.toLowerCase() !== selectUrgency.value &&
+                selectUrgency.value !== 'all'
             )) {
                 hiddenCard.hidden = true;
             } else {
@@ -150,14 +154,14 @@ export default class Filter {
         let cardDate = new Date(appointmentDate);
 
         if ((cardDate - currentDate.setUTCHours(0, 0, 0, 0)) < 0) {
-            return 'Done';
-        } else return 'Open';
+            return 'done';
+        } else return 'open';
     }
 
     createfilterInfo() {
         let filterInfo = document.createElement('p');
         filterInfo.id = 'result-filter-id';
-        filterInfo.className = 'container text-secondary'
+        filterInfo.className = 'container text-secondary';
         filterInfo.textContent = 'No results found';
         this.root.append(filterInfo);
     }

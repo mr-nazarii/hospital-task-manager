@@ -14,7 +14,12 @@ class Visit {
     select.id = "selectDoctor";
     select.classList.add("form-select");
 
-    const docs = ["Dentist", "Cardiologist", "Therapist"];
+    const docs = [
+      "--- Select a Doctor ---",
+      "Dentist",
+      "Cardiologist",
+      "Therapist",
+    ];
 
     docs.forEach((e) => {
       const option = document.createElement("option");
@@ -87,6 +92,13 @@ class Visit {
       "textarea",
       false
     );
+  }
+
+  doctorForm() {
+    const div = document.createElement("div");
+    div.id = "doctor-form";
+
+    return div;
   }
 
   label(div, key, form, element) {
