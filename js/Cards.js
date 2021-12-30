@@ -1,6 +1,9 @@
 import {ROOT, STATUS_OK} from "./Constants.js";
 import request from './Requests.js';
 import alertMessage from './Alert.js';
+import {Visit, VisitCardiologist, VisitDentist, VisitTherapist} from "./Visit.js";
+import VisitForm from "./VisitForm.js";
+
 
 class Cards {
 
@@ -9,14 +12,25 @@ class Cards {
     }
 
     createCard() {
+        let createdCard = this.createBodyOfCard();
+        root.append(createdCard);
+        this.cardElement = createdCard;
+    }
+
+    replaceCard(elementForReplace) {
+        let createdCardForChange = this.createBodyOfCard();
+        elementForReplace.replaceWith(createdCardForChange);
+        this.cardElement = createdCardForChange;
+    }
+
+    createBodyOfCard(){
         const card = document.createElement('div')
         card.setAttribute('id', this.visit.id);
         card.className = "card border-info text-black bg-light mb-3";
         this.createHeader(card);
         this.createBody(card);
         this.createButtons(card);
-        root.append(card);
-        this.cardElement = card;
+        return card;
     }
 
     createHeader(card) {
@@ -89,12 +103,7 @@ class Cards {
         element.additionalInfo.classList.replace('hide-element', 'show-element');
     }
 
-    editCard() {
-        console.log('edit card');
-    }
-
     deleteCardExecuted(element) {
-        console.log(element);
         request.delete(element.visit.id).then(response => {
             if (response.status === STATUS_OK) {
                 element.cardElement.remove();
@@ -123,8 +132,6 @@ class Cards {
         allKeys.forEach(el => {
             mySet.add(el)
         });
-        console.log('allKeys');
-        console.log(allKeys);
         let totalAnswer = '';
         const separator = ', '
         if (mySet.has('age')) {
@@ -139,8 +146,8 @@ class Cards {
         if (mySet.has('urgency')) {
             totalAnswer += `How urgent is the visit : ${this.visit.urgency}` + separator;
         }
-        if (mySet.has('dateLastVisit')) {
-            totalAnswer += `Last Visit to the Doctor : ${this.visit.dateLastVisit}` + separator;
+        if (mySet.has('date')) {
+            totalAnswer += `Last Visit to the Doctor : ${this.visit.date}` + separator;
         }
         if (mySet.has('bloodPresure')) {
             totalAnswer += `Your regular blood pressure : ${this.visit.bloodPresure}` + separator;
@@ -158,10 +165,25 @@ class Cards {
     }
 
 
+    editCard(element) {
+        let visitForm;
+        if (element.visit.selectDoctor === "dentist") {
+            const visitDentist = new VisitDentist();
+            visitForm = new VisitForm(visitDentist.render(element.visit));
+        } else if (element.visit.selectDoctor === "cardiologist") {
+            const visitCardiologist = new VisitCardiologist();
+            visitForm = new VisitForm(visitCardiologist.render(element.visit));
+        } else if (element.visit.selectDoctor === "therapist") {
+            const visitTherapist = new VisitTherapist();
+            visitForm = new VisitForm(visitTherapist.render(element.visit));
+        }
+        visitForm.render(element.visit.id, element.visit.selectDoctor);
+    }
+
+
 }
 
 function addOneCard(response) {
-    console.log(response);
     addOneCardForStorage(response);
     let cars = new Cards(response);
     cars.createCard();
@@ -169,6 +191,25 @@ function addOneCard(response) {
     if (pToDelete) {
         pToDelete.remove();
     }
+}
+
+function updateOneCard(response) {
+    updateOneCardInStorage(response)
+    const cardSelected = document.getElementById(response.id);
+    let card = new Cards(response);
+    card.replaceCard(cardSelected)
+}
+
+function updateOneCardInStorage(response) {
+    const listOfCards = JSON.parse(localStorage.getItem('cards'));
+    const newArray = listOfCards.map(el => {
+        if (el.id === response.id) {
+            return response;
+        } else {
+            return el;
+        }
+    });
+    localStorage.setItem('cards', JSON.stringify(newArray));
 }
 
 
@@ -196,7 +237,6 @@ function getAllCards() {
 
 function deleteCardFromStorage(elId) {
     const listOfCards = JSON.parse(localStorage.getItem('cards'));
-    console.log(listOfCards);
     const newArray = listOfCards.filter(el => el.id !== elId);
     addCardForStorage(newArray);
 }
@@ -208,7 +248,6 @@ function addCardForStorage(data) {
 function addOneCardForStorage(data) {
     const listOfCards = JSON.parse(localStorage.getItem('cards'));
     if (listOfCards && listOfCards.length > 0) {
-        console.log(listOfCards)
         const listOfCardsParsed = JSON.parse(localStorage.getItem('cards'));
         listOfCardsParsed.push(data);
         localStorage.setItem('cards', JSON.stringify(listOfCardsParsed));
@@ -221,8 +260,6 @@ function addOneCardForStorage(data) {
 
 function checkStorage() {
     const listOfCards = JSON.parse(localStorage.getItem('cards'));
-    console.log(listOfCards);
-    console.log(listOfCards.length);
     return listOfCards && listOfCards.length === 0;
 }
 
@@ -234,6 +271,6 @@ function renderNoDataExist() {
 }
 
 export {
-    Cards, getAllCards, renderNoDataExist, addOneCard
+    Cards, getAllCards, renderNoDataExist, addOneCard, updateOneCard
 };
 
