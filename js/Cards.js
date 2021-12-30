@@ -165,7 +165,6 @@ class Cards {
         return totalAnswer;
     }
 
-
     editCard(element) {
         let visitForm;
         if (element.visit.selectDoctor === "dentist") {
@@ -180,7 +179,6 @@ class Cards {
         }
         visitForm.render(element.visit.id, element.visit.selectDoctor);
     }
-
 
 }
 
@@ -200,7 +198,9 @@ function updateOneCard(response) {
     updateOneCardInStorage(response)
     const cardSelected = document.getElementById(response.id);
     let card = new Cards(response);
-    card.replaceCard(cardSelected)
+    card.replaceCard(cardSelected);
+    const filter = new Filter(ROOT);
+    filter.filterData();
 }
 
 function updateOneCardInStorage(response) {
