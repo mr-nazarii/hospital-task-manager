@@ -1,6 +1,7 @@
 import { ROOT, STATUS_OK } from "./Constants.js";
 import request from './Requests.js';
 import alertMessage from './Alert.js';
+import Filter from './Filter.js';
 
 class Cards {
 
@@ -169,6 +170,8 @@ function addOneCard(response) {
     if (pToDelete) {
         pToDelete.remove();
     }
+    const filter = new Filter(ROOT);
+    filter.filterData();
 }
 
 
