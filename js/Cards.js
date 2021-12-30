@@ -1,9 +1,10 @@
-import {ROOT, STATUS_OK} from "./Constants.js";
+import { ROOT, STATUS_OK } from "./Constants.js";
 import request from './Requests.js';
 import alertMessage from './Alert.js';
-import {Visit, VisitCardiologist, VisitDentist, VisitTherapist} from "./Visit.js";
+import {VisitCardiologist, VisitDentist, VisitTherapist} from "./Visit.js";
 import VisitForm from "./VisitForm.js";
 
+import Filter from './Filter.js';
 
 class Cards {
 
@@ -191,6 +192,8 @@ function addOneCard(response) {
     if (pToDelete) {
         pToDelete.remove();
     }
+    const filter = new Filter(ROOT);
+    filter.filterData();
 }
 
 function updateOneCard(response) {
@@ -266,6 +269,7 @@ function checkStorage() {
 function renderNoDataExist() {
     const nodataInfo = document.createElement('p');
     nodataInfo.setAttribute('id', 'no-data');
+    nodataInfo.className = 'col-12 text-center';
     nodataInfo.textContent = 'No items have been added';
     ROOT.append(nodataInfo);
 }
