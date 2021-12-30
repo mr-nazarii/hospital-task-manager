@@ -1,4 +1,4 @@
-import {ROOT, STATUS_OK} from "./Constants.js";
+import { ROOT, STATUS_OK } from "./Constants.js";
 import request from './Requests.js';
 import alertMessage from './Alert.js';
 
@@ -229,6 +229,7 @@ function checkStorage() {
 function renderNoDataExist() {
     const nodataInfo = document.createElement('p');
     nodataInfo.setAttribute('id', 'no-data');
+    nodataInfo.className = 'col-12 text-center';
     nodataInfo.textContent = 'No items have been added';
     ROOT.append(nodataInfo);
 }
