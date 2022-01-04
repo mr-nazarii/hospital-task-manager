@@ -48,9 +48,9 @@ class Requests {
 
     return this.fetchMethod('delete', id);
   }
-  put(id) {
+  put(id, obj) {
     this.url = CARDS_URL;
-    return this.fetchMethod();
+    return this.fetchMethod('put',id, obj);
   }
 
   post(obj) {
