@@ -92,7 +92,7 @@ export default class Filter {
 
         buttonSearch.addEventListener('click', (e) => {
             e.preventDefault();
-            if (JSON.parse(localStorage.getItem('cards')).length > 0) {
+            if (localStorage.getItem('cards')) {
                 this.filterData();
             }
         });
@@ -100,7 +100,8 @@ export default class Filter {
         buttonReset.addEventListener('click', (e) => {
             e.preventDefault();
             filterForm.reset();
-            if (JSON.parse(localStorage.getItem('cards')).length > 0) {
+
+            if (localStorage.getItem('cards')) {
                 this.filterData();
             }
         })
