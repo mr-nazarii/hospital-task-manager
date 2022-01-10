@@ -44,7 +44,7 @@ export default class LoginForm {
 
     const submit = document.createElement("button");
     submit.classList.add("btn", "btn-primary");
-    submit.textContent = "Войти";
+    submit.textContent = "Login";
 
     form.append(email, password, submit);
 
